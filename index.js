@@ -1,5 +1,4 @@
 var config = require('./config.js')
-  //, Twit = require('twit')
   , Twit = require('ntwitter')
   , twei = require('twei')
   , T = new Twit(config.twitter)
@@ -7,9 +6,7 @@ var config = require('./config.js')
 
 T.stream('statuses/filter', {follow: getTwitterUid()}, function(stream) {
   console.log('connected');
-  stream.on('connect', function (request) {
-    console.log('connected.');
-  }).on('error', function(e, result) {
+  stream.on('error', function(e, result) {
     console.log('error')
     console.log(e);
     console.log(result);
@@ -25,25 +22,11 @@ T.stream('statuses/filter', {follow: getTwitterUid()}, function(stream) {
         twei.updateWeibo(data);
       }
     });
-  }).on('disconnect', function (disconnectMessage) {
-    console.log(disconnectMessage);
-  }).on('reconnect', function (req, res, connectInterval) {
-    var body;
-    console.log('reconnect');
-    //console.log(res);
-    res.on('data', function(chunk) {
-      body = body ? body.concat(chunk) : chunk;
-    });
-    res.on('end', function() {
-      console.log(buffer.toString());
-    });
-  }).on('warning', function (warning) {
-    console.log(warning);
-  });
+  };
 
 });
 
-//½« tweet ×ª³ÉÎ¢²©ÔÊĞíµÄ¸ñÊ½
+//å°† tweet è½¬æˆå¾®åšå…è®¸çš„æ ¼å¼
 function formatTweetForWeibo(tweet, callback) {
   var text, place, media, img;
   
@@ -62,7 +45,7 @@ function formatTweetForWeibo(tweet, callback) {
         text = text.replace(hashInfo.text, hashInfo.text + '#');
       });
       
-      //×ª»» t.co µ½Ô­Ê¼ url, ¶ÔÓÚÔ­Ê¼ url ¾ÍÊÇÊ¹ÓÃ t.co µÄÎŞĞ§
+      //è½¬æ¢ t.co åˆ°åŸå§‹ url, å¯¹äºåŸå§‹ url å°±æ˜¯ä½¿ç”¨ t.co çš„æ— æ•ˆ
       tweet.entities.urls.forEach(function(urlInfo){
         text = text.replace(urlInfo.url, urlInfo.expanded_url);
       });
