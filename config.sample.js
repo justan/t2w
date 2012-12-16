@@ -1,12 +1,14 @@
+//å°†æœ¬æ–‡ä»¶æ‹·è´ä¸º config.js, å¹¶å¡«ä¸Šä½ çš„ twitter å’Œ weibo ä¿¡æ¯
+
 var config = {
-  //twitter ËùĞèµÄÕâĞ©²ÎÊı¿ÉÒÔ´Ó https://dev.twitter.com ĞÂ½¨Ò»¸ö app ºó»ñÈ¡.
+  //twitter æ‰€éœ€çš„è¿™äº›å‚æ•°å¯ä»¥ä» https://dev.twitter.com æ–°å»ºä¸€ä¸ª app åè·å–.
   twitter: {
     consumer_key: 'key',
     consumer_secret: 'secret', 
     access_token_key: 'key',
     access_token_secret: 'secet'
   },
-  // weibo µÄ access_token ¿ÉÒÔ´ÓÕâÀïÊÚÈ¨È¡µÃ: http://t.cn/zWKjcla
+  // weibo çš„ access_token å¯ä»¥ä»è¿™é‡Œæˆæƒå–å¾—: http://t.cn/zWKjcla
   weibo: {
     access_token: 'weibo'
   }
