@@ -14,11 +14,12 @@ t2w
 ## 使用
 
 1. `git clone https://github.com/justan/t2w.git`
-2. `cp config.sample.js config.js`
-3. 输入 config.js 中 twitter 的 'consumer_key, consumer_secret, access_token_key, access_token_secret', 这些可以通过在 https://dev.twitter.com 注册一个 app 获得
-4. 输入 config.js 中微博的 access_token. 简单的, 可以从 http://t.cn/zWKjcla 获得
-5. 确保你的机器可以访问 twitter
-6. `nohup node index.js &`
+2. `cd t2w && npm install`
+3. `cp config.sample.js config.js`
+4. 输入 config.js 中 twitter 的 'consumer_key, consumer_secret, access_token_key, access_token_secret', 这些可以通过在 https://dev.twitter.com 注册一个 app 获得
+5. 输入 config.js 中微博的 access_token. 简单的, 可以从 http://t.cn/zWKjcla 获得
+6. 确保你的机器可以访问 twitter
+7. `nohup node index.js &`
 
 ## 后记
 
