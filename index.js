@@ -11,14 +11,16 @@ T.stream('statuses/filter', {follow: getTwitterUid()}, function(stream) {
     console.log(e);
     console.log(result);
   }).on('data', function(tweet){
-    console.log('data coming')
-    //console.log(tweet);
+    console.log('tweet coming: ')
+    console.log(tweet);
     formatTweetForWeibo(tweet, function(err, data){
       if(err){
-        throw err;
+        //throw err;
+        console.error(err);
       }else{
-        console.log('kai shi fa weibo');
         data.accessToken = config.weibo.access_token;
+        console.log('kai shi fa weibo: ');
+        console.log(data);
         twei.updateWeibo(data);
       }
     });
@@ -32,12 +34,12 @@ function formatTweetForWeibo(tweet, callback) {
   
   //抛弃那些无同步意义的 tweet:
   //@某人, 回复某人, 转发
-  if(tweet.in_reply_to_user_id_str || tweet.entities.user_mentions.length || tweet.retweeted_status){
-    console.log('drop');
-    callback('drop');
-    return;
-  }else{
-    try{
+  try{
+    if(tweet.in_reply_to_user_id_str || tweet.entities.user_mentions && tweet.entities.user_mentions.length || tweet.retweeted_status){
+      console.log('drop');
+      callback('drop');
+      return;
+    }else{
       text = tweet.text;
       media = tweet.entities.media;
       place = tweet.place && tweet.place.bounding_box.coordinates ? tweet.place.bounding_box.coordinates[0][0] : [];
@@ -77,9 +79,9 @@ function formatTweetForWeibo(tweet, callback) {
           , image: img
         });
       }
-    }catch(e) {
-      callback(e);
     }
+  }catch(e) {
+    callback(e);
   }
 }
 
@@ -129,5 +131,6 @@ function getTwitterUid() {
 }
 
 module.exports = {
-  checkUrl: checkUrl
+    checkUrl: checkUrl
+  , formatTweetForWeibo: formatTweetForWeibo
 };
