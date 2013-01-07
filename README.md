@@ -9,7 +9,7 @@ t2w
 2. 还原短网址
 3. 同步图片, 地理信息
 4. 实时(twitter stream API)
-5. 丢掉不宜同步的 tweet, 包括: @某人, 回复某人, 转发
+5. 丢掉不宜同步的 tweet, 包括: @某人, 回复某人
 
 ## 使用
 
@@ -17,7 +17,7 @@ t2w
 2. `cd t2w && npm install`
 3. `cp config.sample.js config.js`
 4. 输入 config.js 中 twitter 的 'consumer_key, consumer_secret, access_token_key, access_token_secret', 这些可以通过在 https://dev.twitter.com 注册一个 app 获得
-5. 输入 config.js 中微博的 access_token. 简单的, 可以从 http://t.cn/zWKjcla 获得
+5. 输入 config.js 中微博的 access_token. 访问[微博 API 测试工具][1]获得你的微博 access_token. 测试用可以从 [http://t.cn/zWKjcla][0] 获得
 6. 确保你的机器可以访问 twitter
 7. `nohup node index.js &`
 
@@ -28,3 +28,4 @@ t2w
 
 [twei]: https://github.com/justan/twei
 [0]: http://t.cn/zWKjcla
+[1]: http://open.weibo.com/tools/console
