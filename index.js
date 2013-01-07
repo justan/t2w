@@ -21,7 +21,17 @@ T.stream('statuses/filter', {follow: getTwitterUid()}, function(stream) {
         data.accessToken = config.weibo.access_token;
         console.log('kai shi fa weibo: ');
         console.log(data);
-        twei.updateWeibo(data);
+        twei.updateWeibo(data).on('success', function(reply){
+          if(reply.error){
+            console.log('weibo error: ');
+            console.log(reply);
+          }else{
+            console.log('done');
+          }
+        }).on('error', function(e){
+          console.log('failed: ');
+          console.log(e);
+        });
       }
     });
   });
@@ -29,17 +39,29 @@ T.stream('statuses/filter', {follow: getTwitterUid()}, function(stream) {
 });
 
 //将 tweet 转成微博允许的格式
-function formatTweetForWeibo(tweet, callback) {
-  var text, place, media, img, urls;
+function formatTweetForWeibo(originalTweet, callback) {
+  var text, place, media, img, urls
+    , tweet = originalTweet
+    ;
   
   //抛弃那些无同步意义的 tweet:
-  //@某人, 回复某人, 转发
+  //@某人
   try{
-    if(tweet.in_reply_to_user_id_str || tweet.entities.user_mentions && tweet.entities.user_mentions.length || tweet.retweeted_status){
-      console.log('drop');
+    if(tweet.retweeted_status){//RT
+      console.log('RT from: ' + tweet.retweeted_status.user.name);
+      tweet = tweet.retweeted_status;
+    }
+    
+    if(tweet.in_reply_to_user_id_str){//reply
+      console.log('reply somebody');
       callback('drop');
       return;
-    }else{
+    }else if(tweet.entities.user_mentions && tweet.entities.user_mentions.length){//@
+      console.log('@somebody');
+      callback('drop');
+      return;
+    }
+    
       text = tweet.text;
       media = tweet.entities.media;
       place = tweet.place && tweet.place.bounding_box.coordinates ? tweet.place.bounding_box.coordinates[0][0] : [];
@@ -79,7 +101,6 @@ function formatTweetForWeibo(tweet, callback) {
           , image: img
         });
       }
-    }
   }catch(e) {
     callback(e);
   }
@@ -121,6 +142,11 @@ function checkUrl(urls, callback) {
       }).on('error', function(e) {
         checkB(i, url)
       })
+    }else{
+      originUrls[i] = urls[i];
+      if(i === urls.length - 1){
+        callback(originUrls);
+      }
     }
   })
 }
