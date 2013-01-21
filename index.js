@@ -4,39 +4,58 @@ var config = require('./config.js')
   , T = new Twit(config.twitter)
   ;
 
-T.stream('statuses/filter', {follow: getTwitterUid()}, function(stream) {
-  console.log('connected');
-  stream.on('error', function(e, result) {
-    console.log('error')
-    console.log(e);
-    console.log(result);
-  }).on('data', function(tweet){
-    console.log('tweet coming: ')
-    console.log(tweet);
-    formatTweetForWeibo(tweet, function(err, data){
-      if(err){
-        //throw err;
-        console.error(err);
-      }else{
-        data.accessToken = config.weibo.access_token;
-        console.log('kai shi fa weibo: ');
-        console.log(data);
-        twei.updateWeibo(data).on('success', function(reply){
-          if(reply.error){
-            console.log('weibo error: ');
-            console.log(reply);
-          }else{
-            console.log('done');
-          }
-        }).on('error', function(e){
-          console.log('failed: ');
-          console.log(e);
-        });
-      }
-    });
-  });
 
-});
+function t2w(fn) {
+  fn = fn || function(){};
+  
+  T.stream('statuses/filter', {follow: getTwitterUid()}, function(stream) {
+    console.log('connected');
+    stream.on('error', function(e, result) {
+      console.log('error')
+      console.log(e);
+      console.log(result);
+    });
+    
+    stream.on('end', function (res) {});
+    stream.on('destroy', function (res) {
+      console.log('disconnect! To be reconnecting');
+      t2w(fn);
+    });
+    
+    stream.on('limit', function (t) {});
+    stream.on('delete', function (t) {});
+    stream.on('scrub_geo', function (t) {});
+    stream.on('data', function(tweet){
+      console.log('tweet coming: ')
+      console.log(tweet);
+      formatTweetForWeibo(tweet, function(err, data){
+        if(err){
+          //throw err;
+          console.error(err);
+        }else{
+          data.accessToken = config.weibo.access_token;
+          console.log('kai shi fa weibo: ');
+          console.log(data);
+          twei.updateWeibo(data).on('success', function(reply){
+            if(reply.error){
+              console.log('weibo error: ');
+              console.log(reply);
+            }else{
+              console.log('done');
+            }
+          }).on('error', function(e){
+            console.log('failed: ');
+            console.log(e);
+          });
+        }
+      });
+    });
+    
+    fn(stream);
+  });
+}
+
+t2w();
 
 //将 tweet 转成微博允许的格式
 function formatTweetForWeibo(originalTweet, callback) {
@@ -159,4 +178,5 @@ function getTwitterUid() {
 module.exports = {
     checkUrl: checkUrl
   , formatTweetForWeibo: formatTweetForWeibo
+  , t2w: t2w
 };
