@@ -68,7 +68,7 @@ function formatTweetForWeibo(originalTweet, callback) {
   try{
     if(tweet.retweeted_status){//RT
       console.log('RT from: ' + tweet.retweeted_status.user.name);
-      tweet = tweet.retweeted_status;
+      tweet = 'RT ＠' + tweet.retweeted_status.user.name + ' ' + tweet.retweeted_status;
     }
     
     if(tweet.in_reply_to_user_id_str){//reply
