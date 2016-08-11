@@ -84,7 +84,7 @@ function formatTweetForWeibo(originalTweet, callback) {
     
       text = tweet.text;
       media = tweet.entities.media;
-      place = tweet.place && tweet.place.bounding_box.coordinates ? tweet.place.bounding_box.coordinates[0][0] : [];
+      place = tweet.place && tweet.place.bounding_box.coordinates ? [(tweet.place.bounding_box.coordinates[0][0][0] + tweet.place.bounding_box.coordinates[0][2][0]) / 2 ,((tweet.place.bounding_box.coordinates[0][0][1] + tweet.place.bounding_box.coordinates[0][1][1]) / 2)] : [];
       
       //#hash -> #hash#
       tweet.entities.hashtags.forEach(function(hashInfo){
